@@ -17,10 +17,10 @@ public class Subreddit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String desription;
+    private String description;
     @OneToMany(fetch = FetchType.LAZY)
     private List<Post> posts;
-    private Instant createTime;
+    private Instant createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }

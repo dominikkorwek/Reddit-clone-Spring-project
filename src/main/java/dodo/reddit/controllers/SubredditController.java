@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,10 +28,17 @@ public class SubredditController {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<SubredditDto>> getAllSubreddits(){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(subredditService.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SubredditDto> getSubredditById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(subredditService.get(id));
     }
 
 }

@@ -10,15 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Scope("singleton")
 @Slf4j
-
+@Transactional
 public class SubredditService {
     private final SubredditRepository subredditRepository;
     private final SubredditMapper subredditMapperImpl;
@@ -42,8 +40,8 @@ public class SubredditService {
                 .toList();
     }
 
-    public Optional<SubredditDto> get(Long id){
-        return subredditRepository.findOne()
+    public SubredditDto get(Long id){
+        return subredditMapperImpl.mapSubredditToDto(subredditRepository.findById(id).orElseThrow());
     }
 
 }

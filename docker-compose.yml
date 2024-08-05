@@ -21,7 +21,7 @@ services:
     container_name: phpmyadminReddit
     image: phpmyadmin
     environment:
-      PMA_HOST: mysql
+      PMA_HOST: mysqlReddit
     restart: unless-stopped
     ports:
       - "8081:80"
