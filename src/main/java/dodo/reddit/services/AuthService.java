@@ -32,8 +32,8 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
-    @Transactional
-    public boolean singUp(SignRequest request){
+    /*
+    public void singUp(SignRequest request){
         User user = User.builder()
                 .username(request.username())
                 .email(request.email())
@@ -43,15 +43,18 @@ public class AuthService {
                 .role(UserRoleEnum.USER)
                 .build();
 
-        if(userRepository.findUserByUsernameOrEmail(user.getUsername(), user.getEmail())
-                .isPresent()){
-            return false;
-        }
+        if(userRepository.findUserByUsernameOrEmail(user.getUsername(), user.getEmail()).isPresent())
+            return;
+
 
         userRepository.save(user);
-        return true;
     }
 
+    /** autenticate login request and give info about user session
+     *
+     * @param request: LoginRequest
+     * @return: AuthResponse
+     */
     public AuthResponse login(LoginRequest request){
         Authentication authentication = new UsernamePasswordAuthenticationToken(request.username(),request.password());
         authentication = authenticationManager.authenticate(authentication);
@@ -65,6 +68,11 @@ public class AuthService {
                 .build();
     }
 
+    /** validate refresh token and give info about user session
+     *
+     * @param request: RefreshTokenRequest
+     * @return token: AuthResponse
+     */
     public AuthResponse refreshToken(RefreshTokenRequest request){
         tokenService.validateRefreshToken(request.refreshToken());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -77,7 +85,10 @@ public class AuthService {
                 .build();
     }
 
-
+    /**get current user
+     *
+     * @return user : User
+     */
     public User getCurrentUser(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findUserByUsernameOrEmail(username,null).orElseThrow();

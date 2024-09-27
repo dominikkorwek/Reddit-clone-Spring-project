@@ -28,11 +28,8 @@ public class AuthController {
 
     @PostMapping("/signUp")
     public ResponseEntity<String> SignUp(@RequestBody SignRequest request){
-        boolean status = authService.singUp(request);
-        if (status)
-            return new ResponseEntity<>("User Registration Succesfull", HttpStatus.OK);
-
-        return new ResponseEntity<>("User Registration Failed", HttpStatus.BAD_REQUEST);
+        authService.singUp(request);
+        return new ResponseEntity<>("User Registration Succesfull", HttpStatus.OK);
     }
 
     @PostMapping("/login")

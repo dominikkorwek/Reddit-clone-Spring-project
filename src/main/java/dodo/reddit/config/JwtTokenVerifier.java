@@ -50,6 +50,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         Date now = new Date();
 
         if (now.before(expire)){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             filterChain.doFilter(request, response);
             return;
         }
@@ -67,7 +68,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-
+        response.setStatus(HttpServletResponse.SC_OK);
         filterChain.doFilter(request, response);
     }
 }

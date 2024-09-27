@@ -59,13 +59,23 @@ public class SecurityConfig{
                                                    AuthenticationManager manager,
                                                    SecretKey secretKey) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterAfter(new JwtTokenVerifier(secretKey), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/auth/**",
+                                "/v2/api-docs/**",
+                                "/v3/api-docs/**",
+                                "/configuration/ui",
+                                "/swagger-resources/**",
+                                "/configuration/security",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/webjars/**").permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .authenticationManager(manager)
                 .authenticationProvider(daoAuthenticationProvider())
                 .exceptionHandling(exceptions -> exceptions
